@@ -87,7 +87,7 @@
 #define 	DARK_GREY       0xff404040    //	暗灰色
 
 /*---------------------------------------------------------- 函数声明 -------------------------------------------------------*/
-	
+void LCD_Init(void); // 初始化配置
 void LCD_Clear(void);			// 清屏函数
 void LCD_ClearRect(uint16_t x, uint16_t y, uint16_t width, uint16_t height);	// 局部清屏函数
 

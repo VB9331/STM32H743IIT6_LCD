@@ -29,7 +29,7 @@
 #include "lcd_rgb.h"
 #include "dma2d.h"
 #include "ltdc.h"
-
+#include "tim.h"
 static pFONT *LCD_Fonts;		// 英文字体
 static pFONT *LCD_CHFonts;		// 中文字体
 
@@ -45,6 +45,19 @@ struct
 	uint8_t  BytesPerPixel;		// 每个像素所占字节数
 	uint8_t  ShowNum_Mode;		// 数字显示模式
 }LCD;
+
+void LCD_Init(void){
+	LCD_DisplayDirection(Direction_H); 	//	设置横屏显示
+	LCD_SetFont(&Font24); 				 	//	设置默认字体	
+	LCD_ShowNumMode(Fill_Space);			//	设置数字显示默认填充空格
+	
+	LCD_SetLayer(0);  						// 切换到 layer0
+	LCD_SetBackColor(LCD_BLACK); 			//	设置背景色
+	LCD_SetColor(LCD_WHITE);				//	设置画笔颜色
+	LCD_Clear(); 								//	清屏，刷背景色
+	HAL_TIM_PWM_Start(&htim12,TIM_CHANNEL_1);
+	
+}
 
 /*************************************************************************************************
 *	函 数 名:	LCD_SetLayer
@@ -615,10 +628,12 @@ void LCD_DisplayChinese(uint16_t x, uint16_t y, char *pText)
 *					4. 使用示例 LCD_DisplayChinese( 10, 10, "反客科技STM32") ，在坐标(10,10)显示字符串"反客科技STM32"
 *
 ***************************************************************************************************************/
-
+#include <stdio.h>
 void LCD_DisplayText(uint16_t x, uint16_t y, char *pText) 
 {  
- 	
+	static uint8_t count=0;
+ 	printf("text[%hhu]:%s\n",count,pText);
+	count++;
 	while(*pText != 0)	// 判断是否为空字符
 	{
 		if(*pText<=0x7F)	// 判断是否为ASCII码

@@ -1,7 +1,7 @@
 #ifndef  __LCD_TEST_H
 #define	__LCD_TEST_H
 
-#include "stm32h7xx_hal.h"
+#include "main.h"
 #include "lcd_rgb.h"
 #include	"lcd_image.h"
 
@@ -15,6 +15,6 @@ void LCD_Test_FillRect(void);			// æÿ–ŒÃÓ≥‰≤‚ ‘
 void LCD_Test_Image(void);				// Õº∆¨œ‘ æ≤‚ ‘
 void LCD_Test_Vertical(void);			//  ˙÷±œ‘ æ≤‚ ‘
 void LCD_Test_DoubleLayer(void);		// À´≤„œ‘ æ
-
+void test_f2(void);
 #endif //__LCD_TEST_H
 

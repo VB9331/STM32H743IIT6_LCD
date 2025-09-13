@@ -33,6 +33,7 @@
 #include "lcd_image.h"
 #include "lcd_rgb.h"
 #include "lcd_test.h"
+#include "touch_480x272.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -66,19 +67,31 @@ static void MPU_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 /*************************************************************************************************
-*	å‡½ æ•° å:	fputc
-*	å…¥å£å‚æ•°:	ch - è¦è¾“å‡ºçš„å­—ç¬¦ ï¼Œ  f - æ–‡ä»¶æŒ‡é’ˆï¼ˆè¿™é‡Œç”¨ä¸åˆ°ï¼‰
-*	è¿” å›ž å€¼:	æ­£å¸¸æ—¶è¿”å›žå­—ç¬¦ï¼Œå‡ºé”™æ—¶è¿”å›ž EOFï¼ˆ-1ï¼‰
-*	å‡½æ•°åŠŸèƒ½:	é‡å®šå‘ fputc å‡½æ•°ï¼Œç›®çš„æ˜¯ä½¿ç”¨ printf å‡½æ•°
-*	è¯´    æ˜Ž:	æ— 		
+*	º¯ Êý Ãû:	fputc
+*	Èë¿Ú²ÎÊý:	ch - ÒªÊä³öµÄ×Ö·û £¬  f - ÎÄ¼þÖ¸Õë£¨ÕâÀïÓÃ²»µ½£©
+*	·µ »Ø Öµ:	Õý³£Ê±·µ»Ø×Ö·û£¬³ö´íÊ±·µ»Ø EOF£¨-1£©
+*	º¯Êý¹¦ÄÜ:	ÖØ¶¨Ïò fputc º¯Êý£¬Ä¿µÄÊÇÊ¹ÓÃ printf º¯Êý
+*	Ëµ    Ã÷:	ÎÞ		
 *************************************************************************************************/
 
 int fputc(int ch, FILE *f)
 {
-	HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 100);	// å‘é€å•å­—èŠ‚æ•°æ®
+	HAL_UART_Transmit(&huart1, (uint8_t *)&ch, 1, 100);	// ·¢ËÍµ¥×Ö½ÚÊý¾Ý
 	return (ch);
 }
-
+void test_f(void){
+	uint16_t time = 1000;	// ÑÓÊ±Ê±¼ä
+	uint8_t	i = 0;			// ¼ÆÊý±äÁ¿
+	
+// »æÖÆ³õÊ¼½çÃæ£¬°üÀ¨±êÌâ¡¢LOGOÒÔ¼°½ø¶ÈÌõ>>>>>
+	
+//	LCD_SetBackColor(0xffB9EDF8); 			//	ÉèÖÃ±³¾°É«£¬Ê¹ÓÃ×Ô¶¨ÒåÑÕÉ«
+//	LCD_Clear(); 									//	ÇåÆÁ£¬Ë¢±³¾°É«
+	
+	LCD_SetTextFont(&CH_Font32);				// ÉèÖÃ3232ÖÐÎÄ×ÖÌå,ASCII×ÖÌå¶ÔÓ¦Îª3216
+	LCD_SetColor(0xff333333);					//	ÉèÖÃ»­±ÊÉ«£¬Ê¹ÓÃ×Ô¶¨ÒåÑÕÉ«
+	LCD_DisplayText(176, 87,"Ë¢ÆÁ²âÊÔ");	// ÏÔÊ¾ÎÄ±¾
+}
 
 /* USER CODE END 0 */
 
@@ -128,32 +141,37 @@ int main(void)
   MX_DMA2D_Init();
   MX_TIM12_Init();
   /* USER CODE BEGIN 2 */
-	LCD_DisplayDirection(Direction_H); 	//	ï¿½ï¿½ï¿½Ãºï¿½ï¿½ï¿½ï¿½ï¿½Ê¾
-	LCD_SetFont(&Font24); 				 	//	ï¿½ï¿½ï¿½ï¿½Ä¬ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½	
-	LCD_ShowNumMode(Fill_Space);			//	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾Ä¬ï¿½ï¿½ï¿½ï¿½ï¿½Õ¸ï¿½
 	
-	LCD_SetLayer(0);  						// ï¿½Ð»ï¿½ï¿½ï¿½ layer0
-	LCD_SetBackColor(LIGHT_GREEN); 			//	ï¿½ï¿½ï¿½Ã±ï¿½ï¿½ï¿½É«
-	LCD_SetColor(LCD_BLACK);				//	ï¿½ï¿½ï¿½Ã»ï¿½ï¿½ï¿½ï¿½ï¿½É«
-	LCD_Clear(); 								//	ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ë¢ï¿½ï¿½ï¿½ï¿½É«
-	HAL_TIM_PWM_Start(&htim12,TIM_CHANNEL_1);
+	LCD_Init();
 	
-	LCD_SetBackColor(0xffB9EDF8); 			//	è®¾ç½®èƒŒæ™¯è‰²ï¼Œä½¿ç”¨è‡ªå®šä¹‰é¢œè‰²
-	LCD_Clear(); 									//	æ¸…å±ï¼Œåˆ·èƒŒæ™¯è‰²
-//	printf("init\n");
-//	LCD_SetTextFont(&CH_Font32);				// è®¾ç½®3232ä¸­æ–‡å­—ä½“,ASCIIå­—ä½“å¯¹åº”ä¸º3216
-//	LCD_SetColor(0xff333333);					//	è®¾ç½®ç”»ç¬”è‰²ï¼Œä½¿ç”¨è‡ªå®šä¹‰é¢œè‰²
-//	LCD_DisplayText(176, 87,"åˆ·å±æµ‹è¯•");	// æ˜¾ç¤ºæ–‡æœ¬
-//	
-//	LCD_SetColor(0xfffd7923);					//	è®¾ç½®ç”»ç¬”è‰²ï¼Œä½¿ç”¨è‡ªå®šä¹‰é¢œè‰²
-//	LCD_DrawImage(  120, 120, 240, 83, Image_FANKE_240x83) ;		// æ˜¾ç¤ºLOGOå›¾ç‰‡
+	Touch_Init();
 
-//	LCD_SetColor(0xff003366);					//	è®¾ç½®ç”»ç¬”è‰²ï¼Œä½¿ç”¨è‡ªå®šä¹‰é¢œè‰²	
-//	for(uint8_t i=0;i<100;i++)
-//   {
-//		LCD_FillRect(44,228,4*i,6);	// ç»˜åˆ¶çŸ©å½¢ï¼Œå®žçŽ°ç®€æ˜“è¿›åº¦æ¡çš„æ•ˆæžœ
-//		HAL_Delay(15);	
-//   }	
+
+	LCD_SetColor(0xff333333);					//	ÉèÖÃ»­±ÊÉ«£¬Ê¹ÓÃ×Ô¶¨ÒåÑÕÉ«
+	LCD_SetBackColor(0xffB9EDF8); 			//	ÉèÖÃ±³¾°É«£¬Ê¹ÓÃ×Ô¶¨ÒåÑÕÉ«
+	LCD_Clear(); 									//	ÇåÆÁ£¬Ë¢±³¾°É«
+
+	LCD_SetTextFont(&CH_Font24);			// ÉèÖÃ2424ÖÐÎÄ×ÖÌå,ASCII×ÖÌå¶ÔÓ¦Îª2412
+	LCD_SetColor(LCD_BLACK);				// ÉèÖÃ»­±ÊÑÕÉ«
+
+//	LCD_DisplayText( 42,  9,"µçµçµç²âµçµçµçµç4.3´çµçÈÝ´¥Ãþ²âÊÔ");
+//	LCD_DisplayText( 42, 44,"ºËÐÄ°åÐÍºÅ£ºFK743M2-IIcT6");
+//	LCD_DisplayText( 42, 79,"ÆÁÄ»·Ö±æÂÊ£º480*272");		
+	
+	LCD_SetBackColor(0xffB9EDF8); 			//	ÉèÖÃ±³¾°É«£¬Ê¹ÓÃ×Ô¶¨ÒåÑÕÉ«
+	LCD_Clear(); 									//	ÇåÆÁ£¬Ë¢±³¾°É«
+	
+test_f2();
+test_f();
+//LCD_Test_Clear();
+//	
+//	LCD_DisplayString(44, 114,"X1:      Y1:");	
+//	LCD_DisplayString(44, 144,"X2:      Y2:");	
+//	LCD_DisplayString(44, 174,"X3:      Y3:");	
+//	LCD_DisplayString(44, 204,"X4:      Y4:");		
+//	LCD_DisplayString(44, 234,"X5:      Y5:");		
+//	
+	LCD_SetColor(LCD_RED);	//ÉèÖÃ»­±ÊÑÕÉ«
 	
 	
   /* USER CODE END 2 */
@@ -162,15 +180,36 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-		LCD_Test_Clear();			// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-		LCD_Test_Text();			// ï¿½Ä±ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½
-		LCD_Test_Variable();		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ð¡ï¿½ï¿½
-		LCD_Test_Color();			// ï¿½ï¿½É«ï¿½ï¿½ï¿½ï¿½
-		LCD_Test_GrahicTest();	// 2DÍ¼ï¿½Î»ï¿½ï¿½ï¿½
-		LCD_Test_FillRect();		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
-		LCD_Test_Image();			// Í¼Æ¬ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½
+		Touch_Scan();	// ´¥ÃþÉ¨Ãè
 		
-		LCD_Test_Vertical();		// ï¿½ï¿½Ö±ï¿½ï¿½Ê¾ï¿½ï¿½ï¿½ï¿½
+		if(touchInfo.flag == 1)
+		{
+		   LCD_DisplayNumber( 80,114,touchInfo.x[0],4);	// ÏÔÊ¾µÚ1×é×ø±ê
+			LCD_DisplayNumber(200,114,touchInfo.y[0],4);
+			                                        
+			LCD_DisplayNumber( 80,144,touchInfo.x[1],4);	// ÏÔÊ¾µÚ2×é×ø±ê
+			LCD_DisplayNumber(200,144,touchInfo.y[1],4);
+		                                           
+			LCD_DisplayNumber( 80,174,touchInfo.x[2],4);	// ÏÔÊ¾µÚ3×é×ø±ê
+			LCD_DisplayNumber(200,174,touchInfo.y[2],4);
+		                                           
+			LCD_DisplayNumber( 80,204,touchInfo.x[3],4);	// ÏÔÊ¾µÚ4×é×ø±ê
+			LCD_DisplayNumber(200,204,touchInfo.y[3],4);
+		                                           
+			LCD_DisplayNumber( 80,234,touchInfo.x[4],4);	// ÏÔÊ¾µÚ5×é×ø±ê
+			LCD_DisplayNumber(200,234,touchInfo.y[4],4);
+		}
+		HAL_Delay(20);	// GT911´¥ÃþÆÁÉ¨Ãè¼ä¸ô²»ÄÜÐ¡ÓÚ10ms£¬½¨ÒéÉèÖÃÎª20ms
+		
+//		LCD_Test_Clear();			// ????????
+//		LCD_Test_Text();			// ??????????
+//		LCD_Test_Variable();		// ???????????????????§³??
+//		LCD_Test_Color();			// ???????
+//		LCD_Test_GrahicTest();	// 2D??¦Ë???
+//		LCD_Test_FillRect();		// ??????????
+//		LCD_Test_Image();			// ?????????
+//		
+//		LCD_Test_Vertical();		// ??????????
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -244,10 +283,26 @@ void SystemClock_Config(void)
 
 void MPU_Config(void)
 {
+  MPU_Region_InitTypeDef MPU_InitStruct = {0};
 
   /* Disables the MPU */
   HAL_MPU_Disable();
 
+  /** Initializes and configures the Region and the memory to be protected
+  */
+  MPU_InitStruct.Enable = MPU_REGION_ENABLE;
+  MPU_InitStruct.Number = MPU_REGION_NUMBER0;
+  MPU_InitStruct.BaseAddress = 0x0;
+  MPU_InitStruct.Size = MPU_REGION_SIZE_32MB;
+  MPU_InitStruct.SubRegionDisable = 0x0;
+  MPU_InitStruct.TypeExtField = MPU_TEX_LEVEL0;
+  MPU_InitStruct.AccessPermission = MPU_REGION_NO_ACCESS;
+  MPU_InitStruct.DisableExec = MPU_INSTRUCTION_ACCESS_ENABLE;
+  MPU_InitStruct.IsShareable = MPU_ACCESS_NOT_SHAREABLE;
+  MPU_InitStruct.IsCacheable = MPU_ACCESS_CACHEABLE;
+  MPU_InitStruct.IsBufferable = MPU_ACCESS_NOT_BUFFERABLE;
+
+  HAL_MPU_ConfigRegion(&MPU_InitStruct);
   /* Enables the MPU */
   HAL_MPU_Enable(MPU_PRIVILEGED_DEFAULT);
 

@@ -138,7 +138,7 @@
           </Flash1>
           <bUseTDR>1</bUseTDR>
           <Flash2>BIN\UL2V8M.DLL</Flash2>
-          <Flash3></Flash3>
+          <Flash3>"" ()</Flash3>
           <Flash4></Flash4>
           <pFcarmOut></pFcarmOut>
           <pFcarmGrp></pFcarmGrp>
@@ -337,7 +337,7 @@
             <v6WtE>0</v6WtE>
             <v6Rtti>0</v6Rtti>
             <VariousControls>
-              <MiscControls></MiscControls>
+              <MiscControls>--locale=english</MiscControls>
               <Define>USE_PWR_LDO_SUPPLY,USE_HAL_DRIVER,STM32H743xx</Define>
               <Undefine></Undefine>
               <IncludePath>../Core/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc;../Drivers/STM32H7xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32H7xx/Include;../Drivers/CMSIS/Include;../App/Inc</IncludePath>
@@ -1036,6 +1036,16 @@
               <FileName>sdram.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\App\Src\sdram.c</FilePath>
+            </File>
+            <File>
+              <FileName>touch_iic.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\Src\touch_iic.c</FilePath>
+            </File>
+            <File>
+              <FileName>touch_480x272.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\App\Src\touch_480x272.c</FilePath>
             </File>
           </Files>
         </Group>

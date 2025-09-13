@@ -172,7 +172,20 @@ void LCD_Test_DoubleLayer(void)
 *
 *	说    明:	无	
 *************************************************************************************************/
-
+void test_f2(void){
+	uint16_t time = 1000;	// 延时时间
+	uint8_t	i = 0;			// 计数变量
+	
+// 绘制初始界面，包括标题、LOGO以及进度条>>>>>
+	
+	LCD_SetBackColor(0xffB9EDF8); 			//	设置背景色，使用自定义颜色
+	LCD_Clear(); 									//	清屏，刷背景色
+	
+extern	pFONT	CH_Font32 ;    //	3232字体
+	LCD_SetTextFont(&CH_Font32);				// 设置3232中文字体,ASCII字体对应为3216
+	LCD_SetColor(0xff333333);					//	设置画笔色，使用自定义颜色
+	LCD_DisplayText(176, 140,"刷屏测试");	// 显示文本
+}
 void LCD_Test_Clear(void)
 {
 	uint16_t time = 1000;	// 延时时间
@@ -186,44 +199,44 @@ void LCD_Test_Clear(void)
 	LCD_SetTextFont(&CH_Font32);				// 设置3232中文字体,ASCII字体对应为3216
 	LCD_SetColor(0xff333333);					//	设置画笔色，使用自定义颜色
 	LCD_DisplayText(176, 87,"刷屏测试");	// 显示文本
-	
-	LCD_SetColor(0xfffd7923);					//	设置画笔色，使用自定义颜色
-	LCD_DrawImage(  120, 120, 240, 83, Image_FANKE_240x83) ;		// 显示LOGO图片
+//	
+//	LCD_SetColor(0xfffd7923);					//	设置画笔色，使用自定义颜色
+//	LCD_DrawImage(  120, 120, 240, 83, Image_FANKE_240x83) ;		// 显示LOGO图片
 
-	LCD_SetColor(0xff003366);					//	设置画笔色，使用自定义颜色	
-	for(i=0;i<100;i++)
-   {
-		LCD_FillRect(44,228,4*i,6);	// 绘制矩形，实现简易进度条的效果
-		HAL_Delay(15);	
-   }	
-	
-	
-	
-// 刷屏测试>>>>>
-		
-	LCD_SetTextFont(&CH_Font24);			// 设置2424中文字体,ASCII字体对应为2412
-	LCD_SetColor(LCD_BLACK);				// 设置画笔颜色
+//	LCD_SetColor(0xff003366);					//	设置画笔色，使用自定义颜色	
+//	for(i=0;i<100;i++)
+//   {
+//		LCD_FillRect(44,228,4*i,6);	// 绘制矩形，实现简易进度条的效果
+//		HAL_Delay(15);	
+//   }	
+//	
+//	
+//	
+//// 刷屏测试>>>>>
+//		
+//	LCD_SetTextFont(&CH_Font24);			// 设置2424中文字体,ASCII字体对应为2412
+//	LCD_SetColor(LCD_BLACK);				// 设置画笔颜色
 
-	for(i=0;i<8;i++)
-	{
-		switch (i)		// 切换背景色
-		{
-			case 0: LCD_SetBackColor(LIGHT_RED); 		break;	
-			case 1: LCD_SetBackColor(LIGHT_GREEN); 	break;				
-			case 2: LCD_SetBackColor(LIGHT_BLUE); 		break;
-			case 3: LCD_SetBackColor(LIGHT_YELLOW); 	break;
-			case 4: LCD_SetBackColor(LIGHT_CYAN);		break;
-			case 5: LCD_SetBackColor(LIGHT_GREY); 		break;
-			case 6: LCD_SetBackColor(LIGHT_MAGENTA); 	break;
-			case 7: LCD_SetBackColor(LCD_WHITE); 		break;			
-			default:	break;			
-		}
-		LCD_Clear();		// 清屏
-		LCD_DisplayText(68, 68,"STM32H743 LTDC 刷屏测试");
-		LCD_DisplayText(68,106,"核心板型号：FK743M2-IIT6");
-		LCD_DisplayText(68,144,"屏幕分辨率：480*272");		
-		HAL_Delay(time);	// 延时
-	}
+//	for(i=0;i<8;i++)
+//	{
+//		switch (i)		// 切换背景色
+//		{
+//			case 0: LCD_SetBackColor(LIGHT_RED); 		break;	
+//			case 1: LCD_SetBackColor(LIGHT_GREEN); 	break;				
+//			case 2: LCD_SetBackColor(LIGHT_BLUE); 		break;
+//			case 3: LCD_SetBackColor(LIGHT_YELLOW); 	break;
+//			case 4: LCD_SetBackColor(LIGHT_CYAN);		break;
+//			case 5: LCD_SetBackColor(LIGHT_GREY); 		break;
+//			case 6: LCD_SetBackColor(LIGHT_MAGENTA); 	break;
+//			case 7: LCD_SetBackColor(LCD_WHITE); 		break;			
+//			default:	break;			
+//		}
+//		LCD_Clear();		// 清屏
+//		LCD_DisplayText(68, 68,"STM32H743 LTDC 刷屏测试");
+//		LCD_DisplayText(68,106,"核心板型号：FK743M2-IIT6");
+//		LCD_DisplayText(68,144,"屏幕分辨率：480*272");		
+//		HAL_Delay(time);	// 延时
+//	}
 }
 
 /*************************************************************************************************
